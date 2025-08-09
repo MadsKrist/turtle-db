@@ -3,12 +3,13 @@ Main API v1 router.
 """
 from fastapi import APIRouter
 
-from turtle_db.api.v1.endpoints import items
+from turtle_db.api.v1.endpoints import items, imports
 
 api_router = APIRouter()
 
 # Include endpoint routers
 api_router.include_router(items.router, prefix="/v1/items", tags=["items"])
+api_router.include_router(imports.router, prefix="/v1/imports", tags=["imports"])
 
 # Health check for API
 @api_router.get("/v1/health", tags=["health"])

@@ -1,11 +1,14 @@
 """
 Common schemas and utilities for the WoW Items API.
 """
-from typing import Optional, Any, List, Dict
+from typing import Optional, Any, List, Dict, TypeVar, Generic
 from enum import Enum
 from pydantic import BaseModel, Field
 
 from turtle_db.config import settings
+
+# Type variable for generic response data
+T = TypeVar('T')
 
 
 class ItemQuality(str, Enum):
@@ -59,10 +62,10 @@ class Currency(BaseModel):
                 self.copper)
 
 
-class APIResponse(BaseModel):
+class APIResponse(BaseModel, Generic[T]):
     """Standard API response wrapper."""
     success: bool = True
-    data: Optional[Any] = None
+    data: Optional[T] = None
     error: Optional[Dict[str, Any]] = None
     message: Optional[str] = None
 

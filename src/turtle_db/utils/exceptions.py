@@ -106,3 +106,34 @@ class DatabaseException(TurtleDBException):
             code="DATABASE_ERROR",
             details=details
         )
+
+
+# Import-specific exceptions
+
+class ImportException(TurtleDBException):
+    """Base exception for import operations."""
+    pass
+
+
+class ImportValidationError(ImportException):
+    """Invalid import data or URL format."""
+    def __init__(self, message: str):
+        super().__init__(message, "IMPORT_VALIDATION_ERROR")
+
+
+class ImportSourceError(ImportException):
+    """Error accessing external data source."""
+    def __init__(self, message: str):
+        super().__init__(message, "IMPORT_SOURCE_ERROR")
+
+
+class ImportDuplicateError(ImportException):
+    """Attempting to import duplicate item."""
+    def __init__(self, item_name: str):
+        super().__init__(f"Item '{item_name}' already exists", "IMPORT_DUPLICATE")
+
+
+class ImportMappingError(ImportException):
+    """Error mapping scraped data to database models."""
+    def __init__(self, field: str, value: str):
+        super().__init__(f"Cannot map {field}: {value}", "IMPORT_MAPPING_ERROR")

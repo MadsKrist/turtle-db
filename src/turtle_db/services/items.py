@@ -230,3 +230,18 @@ class ItemService:
             raise ReferenceDataNotFoundException("item_slot", name)
         
         return item_slot
+    
+    async def get_item_by_name(self, name: str) -> Item | None:
+        """Get an item by name. Returns None if not found."""
+        query = (
+            select(Item)
+            .options(
+                selectinload(Item.type),
+                selectinload(Item.subtype).selectinload(ItemSubtype.type),
+                selectinload(Item.slot)
+            )
+            .where(Item.name == name)
+        )
+        
+        result = await self.db.execute(query)
+        return result.scalar_one_or_none()
