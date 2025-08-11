@@ -47,15 +47,21 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
 
 async def create_tables():
     """Create all database tables."""
-    from turtle_db.database.models import Base as ModelsBase
+    from turtle_db.database.enhanced_models import Base as EnhancedModelsBase
     
     async with engine.begin() as conn:
         # Drop all tables for fresh start (development only)
-        # await conn.run_sync(ModelsBase.metadata.drop_all)
+        # await conn.run_sync(EnhancedModelsBase.metadata.drop_all)
         
         # Create all tables
-        await conn.run_sync(ModelsBase.metadata.create_all)
+        await conn.run_sync(EnhancedModelsBase.metadata.create_all)
         logger.info("Database tables created successfully")
+
+
+async def run_migrations():
+    """Run database migrations to upgrade schema."""
+    from turtle_db.database.migrations import run_database_migration
+    await run_database_migration()
 
 
 async def close_db_connection():

@@ -7,7 +7,7 @@ from contextlib import asynccontextmanager
 import logging
 
 from turtle_db.api.v1.router import api_router
-from turtle_db.database.connection import create_tables
+from turtle_db.database.connection import create_tables, run_migrations
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,11 +22,18 @@ async def lifespan(app: FastAPI):
     await create_tables()
     logger.info("Database tables created successfully")
     
-    # Seed database with initial data
+    # Run migrations to ensure schema is up to date
     try:
-        from turtle_db.database.seed_data import seed_database
-        await seed_database()
-        logger.info("Database seeded with initial data")
+        await run_migrations()
+        logger.info("Database migrations completed")
+    except Exception as e:
+        logger.warning(f"Database migrations failed: {e}")
+    
+    # Seed database with enhanced data
+    try:
+        from turtle_db.database.enhanced_seed_data import seed_enhanced_database
+        await seed_enhanced_database()
+        logger.info("Database seeded with enhanced WoW data")
     except Exception as e:
         logger.warning(f"Database seeding failed: {e}")
     

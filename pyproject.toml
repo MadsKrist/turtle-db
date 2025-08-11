@@ -18,10 +18,12 @@ dependencies = [
     "httpx>=0.25.0",
     "beautifulsoup4>=4.12.0",
     "lxml>=4.9.0",
+    "click>=8.1.0",
 ]
 
 [project.scripts]
 turtle-db = "turtle_db:main"
+turtle-db-cli = "turtle_db.cli:cli"
 
 [build-system]
 requires = ["uv_build>=0.8.2,<0.9.0"]
